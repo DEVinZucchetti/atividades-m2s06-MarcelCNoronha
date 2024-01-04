@@ -16,4 +16,8 @@ use App\Http\Controllers\PessoasController;
 */
 Route::prefix('pessoas')->group(function(){
     Route::get('',[PessoasController::class, 'index']);
+    Route::post('',[PessoasController::class, 'store']);
+    Route::post('/$id',[PessoasController::class, 'update']);
+    Route::delete('/$id',[PessoasController::class, 'delete']);
+    Route::get('/$id',[PessoasController::class, 'show']);
 });
