@@ -9,7 +9,6 @@ class PessoasController extends Controller
 {
     public function index()
     {
-
         try {
             $pessoas = Pessoa::all();
             $message = $pessoas->count() . " " . ($pessoas->count() === 1 ? "pessoa encontrada" : "pessoas encontradas" . " com sucesso.");
@@ -63,9 +62,16 @@ class PessoasController extends Controller
     public function destroy($id)
     {
         try {
-            //code...
-        } catch (\Exception $exception) {
-            return $this->response($exception->getMessage(), null, 500);
+            $pessoa = Pessoa::find($id);
+
+            if(empty($pessoa)) {
+                return $this->response('Pessoa não encontrada', null, false, 404);
+            }
+
+            $success = Pessoa::destroy($id);
+            return $this->response("Pessoa $pessoa->name excluida com sucesso", null);
+        } catch (\Exception $execption) {
+            return $this->response($execption->getMessage(), null, false, 500);
         }
     }
     public function show($id)
