@@ -29,23 +29,38 @@ class PessoasController extends Controller
             ]);
 
             $pessoa = Pessoa::create($request->all());
-            $message = $pessoa->name ." cadastrada com sucesso";
+            $message = $pessoa->name." cadastrada com sucesso";
             return $this->response($message, $pessoa);
         } catch (\Exception $exception) {
             return $this->response($exception->getMessage(), null, 500);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
         try {
-            //code...
+            $request->validate([
+                'name' => 'required|min:3|max:150',
+                'cpf' => 'min:11|max:20',
+                'contact' => 'max:20',
+            ]);
+
+            $pessoa = Pessoa::find($id);
+
+            if(empty($pessoa)){
+                return $this->response('Pessoa não encontrada', null, false, 404);
+            }
+
+            $pessoa ->update($request->all());
+            $message = $pessoa->name." atualizada com sucesso";
+            return $this->response($message, $pessoa);
+
         } catch (\Exception $exception) {
             return $this->response($exception->getMessage(), null, 500);
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         try {
             //code...
